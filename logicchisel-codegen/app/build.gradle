@@ -1,0 +1,34 @@
+plugins {
+    id 'java'
+    id 'application' // 'run'コマンドでツールを直接実行するために必要
+    id 'com.github.johnrengelman.shadow' version '8.1.1' // 全ての依存関係を含む単一のJARファイルを生成
+}
+
+// プロジェクトの基本情報
+group = 'io.github.makiaato.logicchisel'
+version = '0.1.0-SNAPSHOT'
+sourceCompatibility = '21'
+
+repositories {
+    // ライブラリをダウンロードする場所
+    mavenCentral()
+}
+
+dependencies {
+    // YAMLファイルを読み込むためのライブラリ (SnakeYAML)
+    implementation 'org.yaml:snakeyaml:2.2'
+
+    // テスト用ライブラリ (推奨)
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.2'
+}
+
+application {
+    // './gradlew run'で実行するメインクラスを指定
+    // このクラスは後ほど作成します
+    mainClass = 'io.github.makiaato.logicchisel.codegen.Main'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
