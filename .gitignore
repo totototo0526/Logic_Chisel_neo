@@ -1,0 +1,28 @@
+# OSごとの不要ファイル
+.DS_Store
+Thumbs.db
+
+# IDE/エディタ
+.vscode/
+.idea/
+*.iml
+
+# Gradle関連
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+
+# ログ・一時ファイル
+*.log
+*.tmp
+*.swp
+
+# Javaコンパイル生成物
+*.class
+
+# テストレポート
+test-results/
+out/
+
+# その他
+*.bak
