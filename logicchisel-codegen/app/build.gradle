@@ -18,6 +18,11 @@ dependencies {
     // YAMLファイルを読み込むためのライブラリ (SnakeYAML)
     implementation 'org.yaml:snakeyaml:2.2'
 
+    // ロギングのインターフェース (SLF4J)
+    implementation 'org.slf4j:slf4j-api:2.0.13'
+    // ロギングの実装 (Logback)
+    implementation 'ch.qos.logback:logback-classic:1.5.6'
+
     // テスト用ライブラリ (推奨)
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.2'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.2'
