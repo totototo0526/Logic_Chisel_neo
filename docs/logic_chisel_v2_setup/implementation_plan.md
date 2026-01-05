@@ -1,26 +1,25 @@
-# LogicChisel v2.0 実装計画 (Template Engine)
+# PostgreSQL Setup Plan
 
 ## 目標
-`Tera` テンプレートエンジンを組み込み、DBから取得したデータを元にJavaソースコードを生成する機能を実装する。
+Docker Composeを使用してPostgreSQL環境を構築し、LogicChiselが即座に利用できる状態にする。
 
 ## 変更内容
-### 設定ファイル
-#### [MODIFY] [Cargo.toml](file:///home/kitten/Logic_Chisel_neo/Cargo.toml)
-- `tera = "1"` を追加
+### インフラ構成
+#### [NEW] [docker-compose.yml](file:///home/kitten/Logic_Chisel_neo/docker-compose.yml)
+- PostgreSQL 16
+- データベース名: `logicchisel`
+- ユーザー/パスワード: `user`/`password`
+- ポート: 5432 (ホスト)
 
-### テンプレート処理
-#### [NEW] [src/templates.rs](file:///home/kitten/Logic_Chisel_neo/src/templates.rs)
-- `init_tera() -> Result<Tera>`: テンプレートエンジンの初期化
-- `render_items(objects: &[GameObject]) -> Result<String>`: ModItems.java の生成
+### 環境変数
+#### [NEW] [.env](file:///home/kitten/Logic_Chisel_neo/.env)
+- `DATABASE_URL` の設定
 
-### テンプレートファイル
-#### [NEW] [templates/ModItems.java.tera](file:///home/kitten/Logic_Chisel_neo/templates/ModItems.java.tera)
-- ModItems.java のテンプレート定義
-
-### CLI連携
-#### [MODIFY] [src/main.rs](file:///home/kitten/Logic_Chisel_neo/src/main.rs)
-- `generate` コマンド内でテンプレートレンダリングを呼び出し、ファイルを出力する処理を追加。
+### 初期化スクリプト
+- コンテナ起動後、`schema.sql` を適用
+- テスト用データ (剣、ブロック) を挿入
 
 ## 検証計画
-### 自動テスト
-- `cargo check`
+### 手動検証
+- `docker compose up -d` で起動確認
+- `cargo run -- generate` が成功し、ファイルが生成されることを確認
