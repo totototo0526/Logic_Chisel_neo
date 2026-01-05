@@ -1,0 +1,27 @@
+package com.example.logicchisel;
+
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
+import net.neoforged.neoforge.registries.DeferredRegister;
+import net.neoforged.neoforge.registries.DeferredBlock;
+import net.neoforged.neoforge.registries.DeferredItem;
+
+public class ModBlocks {
+    public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks("{{ mod_id }}");
+    public static final DeferredRegister.Items ITEMS = ModItems.ITEMS; // Use the same Items register for BlockItems
+
+    {% for block in blocks %}
+    // {{ block.display_name }}
+    public static final DeferredBlock<Block> {{ block.id | upper }} = BLOCKS.register("{{ block.id }}",
+        () -> new Block(BlockBehaviour.Properties.of()
+            .strength({{ block.properties.hardness }}, {{ block.properties.resistance }})
+        )
+    );
+    // BlockItem
+    public static final DeferredItem<BlockItem> {{ block.id | upper }}_ITEM = ITEMS.register("{{ block.id }}",
+        () -> new BlockItem({{ block.id | upper }}.get(), new Item.Properties())
+    );
+    {% endfor %}
+}

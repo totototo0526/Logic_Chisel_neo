@@ -1,0 +1,20 @@
+package com.example.logicchisel;
+
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.SwordItem;
+import net.minecraft.world.item.Tiers;
+import net.neoforged.neoforge.registries.DeferredRegister;
+import net.neoforged.neoforge.registries.DeferredItem;
+import net.minecraft.core.registries.Registries;
+
+public class ModItems {
+    public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems("{{ mod_id }}");
+
+    {% for item in items %}
+    // {{ item.display_name }}
+    public static final DeferredItem<SwordItem> {{ item.id | upper }} = ITEMS.register("{{ item.id }}",
+        () -> new SwordItem(Tiers.NETHERITE, 
+            new Item.Properties().attributes(SwordItem.createAttributes(Tiers.NETHERITE, {{ item.properties.attack_damage }}, -2.4f)))
+    );
+    {% endfor %}
+}
