@@ -1,25 +1,29 @@
-# PostgreSQL Setup Plan
+# MDK Integration Plan
 
 ## 目標
-Docker Composeを使用してPostgreSQL環境を構築し、LogicChiselが即座に利用できる状態にする。
+生成されたModコードを、リポジトリ内のMDK (`logicchiselmod-template-1.21.1`) に直接統合する。
 
 ## 変更内容
-### インフラ構成
-#### [NEW] [docker-compose.yml](file:///home/kitten/Logic_Chisel_neo/docker-compose.yml)
-- PostgreSQL 16
-- データベース名: `logicchisel`
-- ユーザー/パスワード: `user`/`password`
-- ポート: 5432 (ホスト)
+### テンプレート
+#### [MODIFY] [templates/ModItems.java.tera](file:///home/kitten/Logic_Chisel_neo/templates/ModItems.java.tera)
+- `package {{ package_name }};` に変更
 
-### 環境変数
-#### [NEW] [.env](file:///home/kitten/Logic_Chisel_neo/.env)
-- `DATABASE_URL` の設定
+#### [MODIFY] [templates/ModBlocks.java.tera](file:///home/kitten/Logic_Chisel_neo/templates/ModBlocks.java.tera)
+- `package {{ package_name }};` に変更
 
-### 初期化スクリプト
-- コンテナ起動後、`schema.sql` を適用
-- テスト用データ (剣、ブロック) を挿入
+### Rustコード
+#### [MODIFY] [src/templates.rs](file:///home/kitten/Logic_Chisel_neo/src/templates.rs)
+- `render_items` と `render_blocks` 関数で `package_name` をコンテキストに追加
+
+#### [MODIFY] [src/main.rs](file:///home/kitten/Logic_Chisel_neo/src/main.rs)
+- 定数定義:
+    - `PACKAGE_NAME`: `com.example.totototo`
+    - `MDK_ROOT`: `logicchiselmod-template-1.21.1`
+- 出力ロジックの変更:
+    - Java: `MDK_ROOT/src/main/java/com/example/totototo/`
+    - Assets: `MDK_ROOT/src/main/resources/assets/logicchisel/models/item/`
 
 ## 検証計画
 ### 手動検証
-- `docker compose up -d` で起動確認
-- `cargo run -- generate` が成功し、ファイルが生成されることを確認
+- `cargo run -- generate` を実行
+- 出力されたファイルがMDKのフォルダ内に正しいパスで存在することを確認

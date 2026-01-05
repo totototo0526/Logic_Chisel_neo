@@ -1,4 +1,4 @@
-package {{ package_name }};
+package com.example.totototo;
 
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -9,19 +9,19 @@ import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredItem;
 
 public class ModBlocks {
-    public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks("{{ mod_id }}");
+    public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks("logicchisel");
     public static final DeferredRegister.Items ITEMS = ModItems.ITEMS; // Use the same Items register for BlockItems
 
-    {% for block in blocks %}
-    // {{ block.display_name }}
-    public static final DeferredBlock<Block> {{ block.id | upper }} = BLOCKS.register("{{ block.id }}",
+    
+    // Test Block
+    public static final DeferredBlock<Block> TEST_BLOCK = BLOCKS.register("test_block",
         () -> new Block(BlockBehaviour.Properties.of()
-            .strength({{ block.properties.hardness }}, {{ block.properties.resistance }})
+            .strength(1.5, 6)
         )
     );
     // BlockItem
-    public static final DeferredItem<BlockItem> {{ block.id | upper }}_ITEM = ITEMS.register("{{ block.id }}",
-        () -> new BlockItem({{ block.id | upper }}.get(), new Item.Properties())
+    public static final DeferredItem<BlockItem> TEST_BLOCK_ITEM = ITEMS.register("test_block",
+        () -> new BlockItem(TEST_BLOCK.get(), new Item.Properties())
     );
-    {% endfor %}
+    
 }

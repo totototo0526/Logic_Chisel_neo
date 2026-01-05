@@ -63,31 +63,40 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             let objects = db::fetch_all_game_objects(&pool).await?;
             println!("Found {} objects.", objects.len());
 
+            // ---- Settings for MDK ----
+            const PACKAGE_NAME: &str = "com.example.totototo";
+            const MOD_ID: &str = "logicchisel"; // TODO: これも動的に
+            let mdk_root = std::path::Path::new("logicchiselmod-template-1.21.1");
+            
+            let java_base_path = mdk_root.join("src/main/java").join(PACKAGE_NAME.replace(".", "/"));
+            let assets_base_path = mdk_root.join(format!("src/main/resources/assets/{}/models/item", MOD_ID));
+            // --------------------------
+
             println!("Generating ModItems.java...");
-            let rendered_items = templates::render_items(&tera, &objects)?;
+            let rendered_items = templates::render_items(&tera, &objects, PACKAGE_NAME)?;
             
             // 出力ディレクトリ作成
-            fs::create_dir_all("generated/java")?;
-            fs::create_dir_all("generated/assets/models/item")?; // Models用
+            fs::create_dir_all(&java_base_path)?;
+            fs::create_dir_all(&assets_base_path)?;
 
-            let mut file = fs::File::create("generated/java/ModItems.java")?;
+            let mut file = fs::File::create(java_base_path.join("ModItems.java"))?;
             file.write_all(rendered_items.as_bytes())?;
-            println!(" - generated/java/ModItems.java");
+            println!(" - {:?}", java_base_path.join("ModItems.java"));
 
             println!("Generating ModBlocks.java...");
-            let rendered_blocks = templates::render_blocks(&tera, &objects)?;
-            let mut file = fs::File::create("generated/java/ModBlocks.java")?;
+            let rendered_blocks = templates::render_blocks(&tera, &objects, PACKAGE_NAME)?;
+            let mut file = fs::File::create(java_base_path.join("ModBlocks.java"))?;
             file.write_all(rendered_blocks.as_bytes())?;
-            println!(" - generated/java/ModBlocks.java");
+            println!(" - {:?}", java_base_path.join("ModBlocks.java"));
 
             println!("Generating Item Models...");
             for obj in &objects {
                 if obj.object_type == "ITEM" {
                     let rendered_json = templates::render_item_model(&tera, obj)?;
-                    let path = format!("generated/assets/models/item/{}.json", obj.id);
+                    let path = assets_base_path.join(format!("{}.json", obj.id));
                     let mut file = fs::File::create(&path)?;
                     file.write_all(rendered_json.as_bytes())?;
-                    println!(" - {}", path);
+                    println!(" - {:?}", path);
                 }
             }
         }

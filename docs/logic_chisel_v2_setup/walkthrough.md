@@ -1,6 +1,6 @@
 # LogicChisel v2.0 Setup Walkthrough
 
-LogicChisel v2.0 の初期セットアップ、Core CLI実装、およびPostgreSQL環境構築が完了しました。
+LogicChisel v2.0 の初期セットアップ、Core CLI実装、PostgreSQL環境構築、およびMDK統合が完了しました。
 
 ## 実施した変更
 ### 1. プロジェクト構成
@@ -10,25 +10,22 @@ LogicChisel v2.0 の初期セットアップ、Core CLI実装、およびPostgre
 ### 2. Core CLI & Templates
 - `src/`: モデル、DB接続、テンプレート処理、CLIロジックを実装。
 - `templates/`: JavaコードおよびJSONアセット用のテンプレートを作成。
+- **MDK統合**: パッケージ名 (`package_name`) を動的に変更できるようにし、出力先をMDKのソースディレクトリに変更しました。
 
 ### 3. PostgreSQL環境 (Docker Compose)
 - `docker-compose.yml`: PostgreSQL 16コンテナ定義。 (Port: 5435)
 - `.env`: DB接続情報 (`DATABASE_URL`)。
-- **データ初期化**: `schema.sql` 適用とテストデータの投入を実施済み。
 
-## 検証結果
-以下の手順で動作を検証しました。
+## 検証結果 (MDK統合)
+`cargo run -- generate` を実行すると、以下のパスにファイルが生成されることを確認しました。
 
-1. **DB起動**: Dockerコンテナ (`logicchisel_db`) がポート **5435** で正常に起動。
-2. **データ確認**: テストデータ (`test_sword`, `test_block`) がDBに存在することを確認。
-3. **コード生成**: `cargo run -- generate` が以下のファイルを生成することを確認。
-    - `generated/java/ModItems.java`
-    - `generated/java/ModBlocks.java`
-    - `generated/assets/models/item/test_sword.json`
+1. **Items**: `logicchiselmod-template-1.21.1/src/main/java/com/example/totototo/ModItems.java`
+2. **Blocks**: `logicchiselmod-template-1.21.1/src/main/java/com/example/totototo/ModBlocks.java`
+3. **Assets**: `logicchiselmod-template-1.21.1/src/main/resources/assets/logicchisel/models/item/test_sword.json`
+
+これにより、RustツールからMDKへのシームレスなコード注入が可能になりました。
 
 ## 今後の操作
-コンテナは起動したままですので、開発を継続できます。
-
 ### コンテナ操作
 ```bash
 docker compose up -d  # 起動

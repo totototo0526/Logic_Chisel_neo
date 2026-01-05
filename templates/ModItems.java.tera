@@ -1,4 +1,4 @@
-package com.example.logicchisel;
+package {{ package_name }};
 
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.SwordItem;

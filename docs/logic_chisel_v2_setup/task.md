@@ -10,8 +10,8 @@
 - [x] テンプレートエンジン統合
     - [x] `src/templates.rs`, templates files
 - [x] PostgreSQLセットアップ
-    - [x] `docker-compose.yml` の作成
-    - [x] `.env` ファイル作成
-    - [x] コンテナ起動とヘルスチェック
-    - [x] データベース初期化 (`schema.sql` 適用)
-    - [x] テストデータ投入
+    - [x] `docker-compose.yml`, `.env` setup
+- [x] MDK統合 (Integration with MDK)
+    - [x] テンプレート修正: パッケージ名を `{{ package_name }}` に変更
+    - [x] `src/templates.rs`: `package_name` の注入
+    - [x] `src/main.rs`: 出力パスの変更 (Java & Assets)

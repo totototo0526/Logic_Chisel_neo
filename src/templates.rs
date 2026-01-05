@@ -8,7 +8,7 @@ pub fn init_tera() -> Result<Tera, tera::Error> {
     Ok(tera)
 }
 
-pub fn render_items(tera: &Tera, objects: &[GameObject]) -> Result<String, tera::Error> {
+pub fn render_items(tera: &Tera, objects: &[GameObject], package_name: &str) -> Result<String, tera::Error> {
     let mut context = Context::new();
     
     // アイテムのみをフィルタリング
@@ -19,11 +19,12 @@ pub fn render_items(tera: &Tera, objects: &[GameObject]) -> Result<String, tera:
         
     context.insert("items", &items);
     context.insert("mod_id", "logicchisel"); // TODO: Configから取得
+    context.insert("package_name", package_name);
 
     tera.render("ModItems.java.tera", &context)
 }
 
-pub fn render_blocks(tera: &Tera, objects: &[GameObject]) -> Result<String, tera::Error> {
+pub fn render_blocks(tera: &Tera, objects: &[GameObject], package_name: &str) -> Result<String, tera::Error> {
     let mut context = Context::new();
     let blocks: Vec<&GameObject> = objects.iter()
         .filter(|o| o.object_type == "BLOCK")
@@ -31,6 +32,7 @@ pub fn render_blocks(tera: &Tera, objects: &[GameObject]) -> Result<String, tera
         
     context.insert("blocks", &blocks);
     context.insert("mod_id", "logicchisel");
+    context.insert("package_name", package_name);
 
     tera.render("ModBlocks.java.tera", &context)
 }
